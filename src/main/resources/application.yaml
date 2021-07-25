@@ -1,0 +1,15 @@
+server:
+  port : 8080
+spring:
+  application:
+    name: "AluraFlix"
+  datasource:
+#    driverClassName: com.mysql.jdbc.Driver
+    driverClassName: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/alch
+    username: root
+    password: root
+  jpa:
+    hibernate.ddl-auto: update
+    generate-ddl: true
+    show-sql: true

@@ -1,29 +1,38 @@
 package com.aluraflix.service;
 
 import com.aluraflix.entity.VideoEntity;
-import com.aluraflix.exception.model.NoContentException;
-import com.aluraflix.mapper.VideoEntityParaVideoDtoMapper;
-import com.aluraflix.model.VideosDto;
+import com.aluraflix.exception.NoContentException;
+import com.aluraflix.exception.OkException;
+import com.aluraflix.mapper.VideoMapper;
+import com.aluraflix.model.VideoDto;
 import com.aluraflix.respository.VideoRepository;
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class VideoService {
 
     private final VideoRepository videoRepostiory;
-    private final VideoEntityParaVideoDtoMapper videoEntityParaVideoDtoMapper;
+    private final VideoMapper videoMapper;
 
-    public List<VideosDto> buscarTodosVideos() {
-        List<VideoEntity> listaVideo = videoRepostiory.findAll();
+    public List<VideoDto> buscarTodosVideos() {
+        List<VideoEntity> listaVideoEntity = videoRepostiory.findAll();
 
-        if(listaVideo.isEmpty()) {
-            throw new NoContentException("Nao contem videos cadastrados");
+        if(listaVideoEntity.isEmpty()) {
+            throw new NoContentException();
         }
 
-        return videoEntityParaVideoDtoMapper.converter(listaVideo);
+        return videoMapper.converterListaVideoEntityParaListaVideoDto(listaVideoEntity);
+    }
+
+    public VideoDto buscarVideoPorId(Long id) {
+        VideoEntity videoEntity = Optional.ofNullable(videoRepostiory.findById(id)
+                .orElseThrow(() -> new OkException("Video com Id " + id + " nao encontrado!"))).get();
+
+        return videoMapper.converterVideoEntityParaVideoDto(videoEntity);
     }
 }
