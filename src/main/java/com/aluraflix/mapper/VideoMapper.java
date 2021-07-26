@@ -25,4 +25,12 @@ public class VideoMapper {
                 .descricao(entity.getDescricao())
                 .url(entity.getUrl()).build();
     }
+
+    public VideoEntity converterVideoDtoParaVideoEntity(VideoDto dto) {
+        return VideoEntity.builder()
+                .id(dto.getId())
+                .titulo(dto.getTitulo())
+                .descricao(dto.getDescricao())
+                .url(dto.getUrl()).build();
+    }
 }

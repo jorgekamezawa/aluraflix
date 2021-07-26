@@ -3,11 +3,9 @@ package com.aluraflix.controller;
 import com.aluraflix.model.VideoDto;
 import com.aluraflix.service.VideoService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -30,5 +28,12 @@ public class VideoController {
         VideoDto videoDto = videoService.buscarVideoPorId(id);
 
         return ResponseEntity.ok(videoDto);
+    }
+
+    @PostMapping
+    public ResponseEntity<VideoDto> salvarVideo(@RequestBody VideoDto body){
+        VideoDto videoDto = videoService.salvarVideo(body);
+
+        return new ResponseEntity<>(videoDto, HttpStatus.CREATED);
     }
 }
