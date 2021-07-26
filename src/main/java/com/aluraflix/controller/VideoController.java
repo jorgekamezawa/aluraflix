@@ -31,8 +31,22 @@ public class VideoController {
     }
 
     @PostMapping
-    public ResponseEntity<VideoDto> salvarVideo(@RequestBody VideoDto body){
-        VideoDto videoDto = videoService.salvarVideo(body);
+    public ResponseEntity<VideoDto> cadastrarVideo(@RequestBody VideoDto body){
+        VideoDto videoDto = videoService.cadastrarVideo(body);
+
+        return new ResponseEntity<>(videoDto, HttpStatus.CREATED);
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<VideoDto> alterarVideo(@PathVariable(name = "id") Long id, @RequestBody VideoDto body){
+        VideoDto videoDto = videoService.alterarVideo(id, body);
+
+        return new ResponseEntity<>(videoDto, HttpStatus.CREATED);
+    }
+
+    @PatchMapping("/{id}")
+    public ResponseEntity<VideoDto> alterarVideoParcialmente(@PathVariable(name = "id") Long id, @RequestBody VideoDto body){
+        VideoDto videoDto = videoService.alterarVideoParcialmente(id, body);
 
         return new ResponseEntity<>(videoDto, HttpStatus.CREATED);
     }

@@ -58,6 +58,7 @@ public class CustomExceptionHandler {
         ErrorModel errorModel = ErrorModel.builder()
                 .message(ex.getMessage())
                 .status(status)
+                .errors(ex.getErrors())
                 .localDateTime(LocalDateTime.now()).build();
 
         return new ResponseEntity<>(errorModel, status);

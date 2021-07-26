@@ -40,15 +40,48 @@ public class VideoService {
         return videoMapper.converterVideoEntityParaVideoDto(videoEntity);
     }
 
-    public VideoDto salvarVideo(VideoDto videoDto) {
+    public VideoDto cadastrarVideo(VideoDto videoDto) {
 //      Certificar que nao contem Id, pois esse metodo é para cadastrar um novo video e nao atualizar
         if(videoDto.getId() != null){
             throw new NotAcceptableException("Nao pode conter Id para realizar o cadastro de um novo video!");
         }
 //      Validar se os campos foram preenchidos corretamente
-        List<VideoDto> listaVideoDto = buscarTodosVideos();
-        videoValidation.validarSalvarVideo(videoDto, listaVideoDto);
+        videoValidation.validarCamposVideoParaSalvar(videoDto);
 
+        return salvarVideo(videoDto);
+    }
+
+    public VideoDto alterarVideo(Long idVideo, VideoDto videoDto) {
+        videoDto.setId(idVideo);
+
+        List<VideoDto> listaVideoDto = buscarTodosVideos();
+//      Validar se os campos foram preenchidos corretamente
+        videoValidation.validarCamposVideoParaAlterar(videoDto, listaVideoDto);
+
+        return salvarVideo(videoDto);
+    }
+
+    public VideoDto alterarVideoParcialmente(Long idVideo, VideoDto videoDto) {
+        videoDto.setId(idVideo);
+
+        List<VideoDto> listaVideoDto = buscarTodosVideos();
+//      Validar se os campos foram preenchidos corretamente
+        videoValidation.validarCamposVideoParaAlterarParcialmente(videoDto, listaVideoDto);
+
+        videoDto = incluirDadosDaBaseEmUmVideoDtoIncompleto(videoDto, buscarVideoPorId(idVideo));
+
+        return salvarVideo(videoDto);
+    }
+
+    private VideoDto incluirDadosDaBaseEmUmVideoDtoIncompleto(VideoDto videoDto, VideoDto videoDtoCadastrado) {
+        if(videoDto.getTitulo() == null) videoDto.setTitulo(videoDtoCadastrado.getTitulo());
+        if(videoDto.getDescricao() == null) videoDto.setDescricao(videoDtoCadastrado.getDescricao());
+        if(videoDto.getUrl() == null) videoDto.setUrl(videoDtoCadastrado.getUrl());
+
+        return videoDto;
+    }
+
+    private VideoDto salvarVideo(VideoDto videoDto) {
         VideoEntity videoEntity = videoMapper.converterVideoDtoParaVideoEntity(videoDto);
 
         try{
