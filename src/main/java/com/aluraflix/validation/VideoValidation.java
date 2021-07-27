@@ -37,9 +37,7 @@ public class VideoValidation {
         validarParaNaoTerTodosCampoPreenchidos(dto);
         validarTamanhoCampos(dto);
 
-        if (dto.getUrl() != null) {
-            validarUrl(dto.getUrl());
-        }
+        if (dto.getUrl() != null) validarUrl(dto.getUrl());
     }
 
     public void validarCamposNulos(VideoDto dto) {
@@ -60,15 +58,15 @@ public class VideoValidation {
     }
 
     private void validarSeContemPeloMenosUmCampoPreenchido(VideoDto dto) {
-        if (dto.getTitulo() == null && dto.getDescricao() == null &&  dto.getUrl() == null) {
+        if (dto.getTitulo() == null && dto.getDescricao() == null && dto.getUrl() == null) {
             throw new NotAcceptableException("Nenhum campo enviado para alteracao!");
         }
     }
 
     private void validarParaNaoTerTodosCampoPreenchidos(VideoDto dto) {
-        if (dto.getTitulo() != null && dto.getDescricao() != null &&  dto.getUrl() != null) {
+        if (dto.getTitulo() != null && dto.getDescricao() != null && dto.getUrl() != null) {
             throw new NotAcceptableException("Essa API é para alterar somente parte dos campos porem " +
-                                                "todos os campos foram enviados!");
+                    "todos os campos foram enviados!");
         }
     }
 

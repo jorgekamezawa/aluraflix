@@ -12,13 +12,12 @@ public class VideoMapper {
 
     public List<VideoDto> converterListaVideoEntityParaListaVideoDto(List<VideoEntity> listaEntity) {
         List<VideoDto> listaDto = new ArrayList<>();
-        listaEntity.forEach(entity ->
-                listaDto.add(converterVideoEntityParaVideoDto(entity))
-        );
+        listaEntity.forEach(entity -> listaDto.add(converterVideoEntityParaVideoDto(entity)));
+
         return listaDto;
     }
 
-    public VideoDto converterVideoEntityParaVideoDto(VideoEntity entity){
+    public VideoDto converterVideoEntityParaVideoDto(VideoEntity entity) {
         return VideoDto.builder()
                 .id(entity.getId())
                 .titulo(entity.getTitulo())

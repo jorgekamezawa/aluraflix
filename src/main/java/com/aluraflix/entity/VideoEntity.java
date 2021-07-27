@@ -15,15 +15,15 @@ public class VideoEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name="id", nullable=false, unique=true)
+    @Column(name = "id", nullable = false, unique = true)
     private Long id;
 
-    @Column(name="titulo", length=30, nullable=false, unique=false)
+    @Column(name = "titulo", length = 30, nullable = false, unique = false)
     private String titulo;
 
-    @Column(name="descricao", length=50, nullable=false, unique=false)
+    @Column(name = "descricao", length = 50, nullable = false, unique = false)
     private String descricao;
 
-    @Column(name="url", length=50, nullable=false, unique=false)
+    @Column(name = "url", length = 50, nullable = false, unique = false)
     private String url;
 }

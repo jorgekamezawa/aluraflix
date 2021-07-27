@@ -16,7 +16,7 @@ import java.time.LocalDateTime;
 public class CustomExceptionHandler {
 
     @ExceptionHandler(value = {NoContentException.class})
-    public ResponseEntity<ErrorModel> handlerNoContentException(NoContentException ex){
+    public ResponseEntity<ErrorModel> handlerNoContentException(NoContentException ex) {
         HttpStatus status = HttpStatus.NO_CONTENT;
 
         ErrorModel errorModel = ErrorModel.builder()
@@ -28,7 +28,7 @@ public class CustomExceptionHandler {
     }
 
     @ExceptionHandler(value = {OkException.class})
-    public ResponseEntity<ErrorModel> handlerOkException(OkException ex){
+    public ResponseEntity<ErrorModel> handlerOkException(OkException ex) {
         HttpStatus status = HttpStatus.OK;
 
         ErrorModel errorModel = ErrorModel.builder()
@@ -40,7 +40,7 @@ public class CustomExceptionHandler {
     }
 
     @ExceptionHandler(value = {InternalServerErrorException.class})
-    public ResponseEntity<ErrorModel> handlerInternalServerErrorException(InternalServerErrorException ex){
+    public ResponseEntity<ErrorModel> handlerInternalServerErrorException(InternalServerErrorException ex) {
         HttpStatus status = HttpStatus.INTERNAL_SERVER_ERROR;
 
         ErrorModel errorModel = ErrorModel.builder()
@@ -52,7 +52,7 @@ public class CustomExceptionHandler {
     }
 
     @ExceptionHandler(value = {NotAcceptableException.class})
-    public ResponseEntity<ErrorModel> handlerNotAcceptableException(NotAcceptableException ex){
+    public ResponseEntity<ErrorModel> handlerNotAcceptableException(NotAcceptableException ex) {
         HttpStatus status = HttpStatus.NOT_ACCEPTABLE;
 
         ErrorModel errorModel = ErrorModel.builder()
@@ -63,5 +63,4 @@ public class CustomExceptionHandler {
 
         return new ResponseEntity<>(errorModel, status);
     }
-
 }

@@ -26,7 +26,7 @@ public class VideoService {
     public List<VideoDto> buscarTodosVideos() {
         List<VideoEntity> listaVideoEntity = videoRepostiory.findAll();
 
-        if(listaVideoEntity.isEmpty()) {
+        if (listaVideoEntity.isEmpty()) {
             throw new NoContentException();
         }
 
@@ -42,7 +42,7 @@ public class VideoService {
 
     public VideoDto cadastrarVideo(VideoDto videoDto) {
 //      Certificar que nao contem Id, pois esse metodo é para cadastrar um novo video e nao atualizar
-        if(videoDto.getId() != null){
+        if (videoDto.getId() != null) {
             throw new NotAcceptableException("Nao pode conter Id para realizar o cadastro de um novo video!");
         }
 //      Validar se os campos foram preenchidos corretamente
@@ -68,15 +68,13 @@ public class VideoService {
 //      Validar se os campos foram preenchidos corretamente
         videoValidation.validarCamposVideoParaAlterarParcialmente(videoDto, listaVideoDto);
 
-        videoDto = incluirDadosDaBaseEmUmVideoDtoIncompleto(videoDto, buscarVideoPorId(idVideo));
-
-        return salvarVideo(videoDto);
+        return salvarVideo(incluirDadosDaBaseEmUmVideoDtoIncompleto(videoDto, buscarVideoPorId(idVideo)));
     }
 
     private VideoDto incluirDadosDaBaseEmUmVideoDtoIncompleto(VideoDto videoDto, VideoDto videoDtoCadastrado) {
-        if(videoDto.getTitulo() == null) videoDto.setTitulo(videoDtoCadastrado.getTitulo());
-        if(videoDto.getDescricao() == null) videoDto.setDescricao(videoDtoCadastrado.getDescricao());
-        if(videoDto.getUrl() == null) videoDto.setUrl(videoDtoCadastrado.getUrl());
+        if (videoDto.getTitulo() == null) videoDto.setTitulo(videoDtoCadastrado.getTitulo());
+        if (videoDto.getDescricao() == null) videoDto.setDescricao(videoDtoCadastrado.getDescricao());
+        if (videoDto.getUrl() == null) videoDto.setUrl(videoDtoCadastrado.getUrl());
 
         return videoDto;
     }
@@ -84,12 +82,27 @@ public class VideoService {
     private VideoDto salvarVideo(VideoDto videoDto) {
         VideoEntity videoEntity = videoMapper.converterVideoDtoParaVideoEntity(videoDto);
 
-        try{
+        try {
             videoEntity = videoRepostiory.save(videoEntity);
-        }catch (RuntimeException e){
-            throw new InternalServerErrorException(e.getMessage());
+        } catch (RuntimeException e) {
+            throw new InternalServerErrorException("Erro ao cadastrar video!");
         }
 
         return videoMapper.converterVideoEntityParaVideoDto(videoEntity);
+    }
+
+    public void deletarVideo(Long idVideo) {
+
+        try {
+            VideoDto videoDto = buscarVideoPorId(idVideo);
+
+            VideoEntity videoEntity = videoMapper.converterVideoDtoParaVideoEntity(videoDto);
+
+            videoRepostiory.delete(videoEntity);
+        } catch (OkException e) {
+            throw new NotAcceptableException(e.getMessage());
+        } catch (RuntimeException e) {
+            throw new InternalServerErrorException("Erro ao deletar video!");
+        }
     }
 }
