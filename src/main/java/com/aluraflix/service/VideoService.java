@@ -19,25 +19,25 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class VideoService {
 
-    private final VideoRepository videoRepostiory;
+    private final VideoRepository videoRepository;
     private final VideoMapper videoMapper;
     private final VideoValidation videoValidation;
 
     public List<VideoDto> buscarTodosVideos() {
-        List<VideoEntity> listaVideoEntity = videoRepostiory.findAll();
+        List<VideoEntity> listaEntity = videoRepository.findAll();
 
-        if (listaVideoEntity.isEmpty()) {
+        if (listaEntity.isEmpty()) {
             throw new NoContentException();
         }
 
-        return videoMapper.converterListaVideoEntityParaListaVideoDto(listaVideoEntity);
+        return videoMapper.converterListaVideoEntityParaListaVideoDto(listaEntity);
     }
 
     public VideoDto buscarVideoPorId(Long id) {
-        VideoEntity videoEntity = Optional.ofNullable(videoRepostiory.findById(id)
+        VideoEntity entity = Optional.ofNullable(videoRepository.findById(id)
                 .orElseThrow(() -> new OkException("Video com Id " + id + " nao encontrado!"))).get();
 
-        return videoMapper.converterVideoEntityParaVideoDto(videoEntity);
+        return videoMapper.converterVideoEntityParaVideoDto(entity);
     }
 
     public VideoDto cadastrarVideo(VideoDto videoDto) {
@@ -71,26 +71,6 @@ public class VideoService {
         return salvarVideo(incluirDadosDaBaseEmUmVideoDtoIncompleto(videoDto, buscarVideoPorId(idVideo)));
     }
 
-    private VideoDto incluirDadosDaBaseEmUmVideoDtoIncompleto(VideoDto videoDto, VideoDto videoDtoCadastrado) {
-        if (videoDto.getTitulo() == null) videoDto.setTitulo(videoDtoCadastrado.getTitulo());
-        if (videoDto.getDescricao() == null) videoDto.setDescricao(videoDtoCadastrado.getDescricao());
-        if (videoDto.getUrl() == null) videoDto.setUrl(videoDtoCadastrado.getUrl());
-
-        return videoDto;
-    }
-
-    private VideoDto salvarVideo(VideoDto videoDto) {
-        VideoEntity videoEntity = videoMapper.converterVideoDtoParaVideoEntity(videoDto);
-
-        try {
-            videoEntity = videoRepostiory.save(videoEntity);
-        } catch (RuntimeException e) {
-            throw new InternalServerErrorException("Erro ao cadastrar video!");
-        }
-
-        return videoMapper.converterVideoEntityParaVideoDto(videoEntity);
-    }
-
     public void deletarVideo(Long idVideo) {
 
         try {
@@ -98,11 +78,31 @@ public class VideoService {
 
             VideoEntity videoEntity = videoMapper.converterVideoDtoParaVideoEntity(videoDto);
 
-            videoRepostiory.delete(videoEntity);
+            videoRepository.delete(videoEntity);
         } catch (OkException e) {
             throw new NotAcceptableException(e.getMessage());
         } catch (RuntimeException e) {
             throw new InternalServerErrorException("Erro ao deletar video!");
         }
+    }
+
+    private VideoDto salvarVideo(VideoDto videoDto) {
+        VideoEntity videoEntity = videoMapper.converterVideoDtoParaVideoEntity(videoDto);
+
+        try {
+            videoEntity = videoRepository.save(videoEntity);
+        } catch (RuntimeException e) {
+            throw new InternalServerErrorException("Erro ao cadastrar video!");
+        }
+
+        return videoMapper.converterVideoEntityParaVideoDto(videoEntity);
+    }
+
+    private VideoDto incluirDadosDaBaseEmUmVideoDtoIncompleto(VideoDto videoDto, VideoDto videoDtoCadastrado) {
+        if (videoDto.getTitulo() == null) videoDto.setTitulo(videoDtoCadastrado.getTitulo());
+        if (videoDto.getDescricao() == null) videoDto.setDescricao(videoDtoCadastrado.getDescricao());
+        if (videoDto.getUrl() == null) videoDto.setUrl(videoDtoCadastrado.getUrl());
+
+        return videoDto;
     }
 }
