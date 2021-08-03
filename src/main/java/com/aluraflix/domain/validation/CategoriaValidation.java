@@ -16,18 +16,12 @@ public class CategoriaValidation {
     }
 
     public void validarCamposCategoriaParaAlterar(CategoriaDto categoriaDto, List<CategoriaDto> listCategoriaDto) {
-        if (!validarId(categoriaDto, listCategoriaDto)) {
-            throw new NotAcceptableException("Id nao encontrado! Favor enviar Id existente!");
-        }
-
+        validarId(categoriaDto, listCategoriaDto);
         validarCamposCategoriaParaSalvar(categoriaDto);
     }
 
     public void validarCamposCategoriaParaAlterarParcialmente(CategoriaDto categoriaDto, List<CategoriaDto> listCategoriaDto) {
-        if (!validarId(categoriaDto, listCategoriaDto)) {
-            throw new NotAcceptableException("Id nao encontrado! Favor enviar Id existente!");
-        }
-
+        validarId(categoriaDto, listCategoriaDto);
         validarSeContemPeloMenosUmCampoPreenchido(categoriaDto);
         validarParaNaoTerTodosCampoPreenchidos(categoriaDto);
         validarTamanhoCampos(categoriaDto);
@@ -78,10 +72,12 @@ public class CategoriaValidation {
         }
     }
 
-    private boolean validarId(CategoriaDto categoriaDto, List<CategoriaDto> listCategoriaDto) {
-        if (categoriaDto.getId() != null) {
-            return listCategoriaDto.stream().anyMatch(categoriaEntity -> categoriaEntity.getId().equals(categoriaDto.getId()));
+    private void validarId(CategoriaDto categoriaDto, List<CategoriaDto> listCategoriaDto) {
+        if (categoriaDto.getId() == null) {
+            return;
         }
-        return true;
+        if (listCategoriaDto.stream().noneMatch(categoriaEntity -> categoriaEntity.getId().equals(categoriaDto.getId()))) {
+            throw new NotAcceptableException("Id nao encontrado! Favor enviar Id existente!");
+        }
     }
 }

@@ -21,18 +21,12 @@ public class VideoValidation {
     }
 
     public void validarCamposVideoParaAlterar(VideoDto dto, List<VideoDto> listDto) {
-        if (!validarId(dto, listDto)) {
-            throw new NotAcceptableException("Id nao encontrado! Favor enviar Id existente!");
-        }
-
+        validarId(dto, listDto);
         validarCamposVideoParaSalvar(dto);
     }
 
     public void validarCamposVideoParaAlterarParcialmente(VideoDto dto, List<VideoDto> listDto) {
-        if (!validarId(dto, listDto)) {
-            throw new NotAcceptableException("Id nao encontrado! Favor enviar Id existente!");
-        }
-
+        validarId(dto, listDto);
         validarSeContemPeloMenosUmCampoPreenchido(dto);
         validarParaNaoTerTodosCampoPreenchidos(dto);
         validarTamanhoCampos(dto);
@@ -91,11 +85,13 @@ public class VideoValidation {
         }
     }
 
-    private boolean validarId(VideoDto dto, List<VideoDto> listDto) {
-        if (dto.getId() != null) {
-            return listDto.stream().anyMatch(entity -> entity.getId().equals(dto.getId()));
+    private void validarId(VideoDto videoDto, List<VideoDto> listVideoDto) {
+        if (videoDto.getId() == null) {
+            return;
         }
-        return true;
+        if (listVideoDto.stream().noneMatch(videoEntity -> videoEntity.getId().equals(videoDto.getId()))) {
+            throw new NotAcceptableException("Id nao encontrado! Favor enviar Id existente!");
+        }
     }
 
     private void validarUrl(String urlString) {
