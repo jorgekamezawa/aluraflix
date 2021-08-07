@@ -10,7 +10,9 @@ public interface VideoPersistenceAdapter {
 
     VideoDto buscarVideoPorId(Long id);
 
-    void deletarVideoPorId(Long idVideo);
-
     VideoDto salvarVideo(VideoDto videoDto);
+
+    VideoDto alterarVideo(VideoDto videoDto);
+
+    void deletarVideoPorId(Long idVideo);
 }

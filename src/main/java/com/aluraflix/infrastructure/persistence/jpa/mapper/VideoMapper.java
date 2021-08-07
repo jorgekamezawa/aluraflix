@@ -1,14 +1,18 @@
 package com.aluraflix.infrastructure.persistence.jpa.mapper;
 
-import com.aluraflix.infrastructure.persistence.jpa.entity.VideoEntity;
 import com.aluraflix.domain.model.VideoDto;
+import com.aluraflix.infrastructure.persistence.jpa.entity.VideoEntity;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.List;
 
 @Component
+@RequiredArgsConstructor
 public class VideoMapper {
+
+    private final CategoriaMapper categoriaMapper;
 
     public List<VideoDto> converterListaVideoEntityParaListaVideoDto(List<VideoEntity> listaEntity) {
         List<VideoDto> listaDto = new ArrayList<>();
@@ -22,7 +26,8 @@ public class VideoMapper {
                 .id(entity.getId())
                 .titulo(entity.getTitulo())
                 .descricao(entity.getDescricao())
-                .url(entity.getUrl()).build();
+                .url(entity.getUrl())
+                .categoria(categoriaMapper.converterCategoriaEntityParaCategoriaDto(entity.getCategoria())).build();
     }
 
     public VideoEntity converterVideoDtoParaVideoEntity(VideoDto dto) {
@@ -30,6 +35,7 @@ public class VideoMapper {
                 .id(dto.getId())
                 .titulo(dto.getTitulo())
                 .descricao(dto.getDescricao())
-                .url(dto.getUrl()).build();
+                .url(dto.getUrl())
+                .categoria(categoriaMapper.converterCategoriaDtoParaCategoriaEntity(dto.getCategoria())).build();
     }
 }

@@ -25,4 +25,7 @@ public class VideoDto {
 
     @JsonProperty("url")
     private String url;
+
+    @JsonProperty("categoria")
+    private CategoriaDto categoria;
 }

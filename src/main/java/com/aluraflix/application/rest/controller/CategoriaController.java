@@ -39,7 +39,7 @@ public class CategoriaController {
 
     @PutMapping("/{id}")
     public ResponseEntity<CategoriaDto> alterarCategoria(@PathVariable(name = "id") Long id, @RequestBody CategoriaDto body) {
-        CategoriaDto categoriaDto = categoriaService.alterarCategoria(id, body);
+        CategoriaDto categoriaDto = categoriaService.alterarCategoriaCompleta(id, body);
 
         return new ResponseEntity<>(categoriaDto, HttpStatus.CREATED);
     }

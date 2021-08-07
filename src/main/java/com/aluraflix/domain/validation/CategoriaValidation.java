@@ -1,33 +1,41 @@
 package com.aluraflix.domain.validation;
 
-import com.aluraflix.domain.exception.NotAcceptableException;
+import com.aluraflix.domain.exception.categoria.CategoriaFieldNotAcceptableException;
 import com.aluraflix.domain.model.CategoriaDto;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.List;
 
 @Component
+@RequiredArgsConstructor
 public class CategoriaValidation {
 
     public void validarCamposCategoriaParaSalvar(CategoriaDto categoriaDto) {
-        validarCamposNulos(categoriaDto);
+        validarQueIdCategoriaSejaNulo(categoriaDto);
+        validarQueCamposNaoSejamNulos(categoriaDto);
         validarTamanhoCampos(categoriaDto);
     }
 
-    public void validarCamposCategoriaParaAlterar(CategoriaDto categoriaDto, List<CategoriaDto> listCategoriaDto) {
-        validarId(categoriaDto, listCategoriaDto);
-        validarCamposCategoriaParaSalvar(categoriaDto);
+    public void validarCamposCategoriaParaAlterar(CategoriaDto categoriaDto) {
+        validarQueCamposNaoSejamNulos(categoriaDto);
+        validarTamanhoCampos(categoriaDto);
     }
 
-    public void validarCamposCategoriaParaAlterarParcialmente(CategoriaDto categoriaDto, List<CategoriaDto> listCategoriaDto) {
-        validarId(categoriaDto, listCategoriaDto);
+    public void validarCamposCategoriaParaAlterarParcialmente(CategoriaDto categoriaDto) {
         validarSeContemPeloMenosUmCampoPreenchido(categoriaDto);
         validarParaNaoTerTodosCampoPreenchidos(categoriaDto);
         validarTamanhoCampos(categoriaDto);
     }
 
-    public void validarCamposNulos(CategoriaDto categoriaDto) {
+    private void validarQueIdCategoriaSejaNulo(CategoriaDto categoriaDto) {
+        if (categoriaDto.getId() != null) {
+            throw new CategoriaFieldNotAcceptableException("Nao pode conter Id para realizar o cadastro de uma nova categoria!");
+        }
+    }
+
+    public void validarQueCamposNaoSejamNulos(CategoriaDto categoriaDto) {
         List<String> erros = new ArrayList<>();
 
         if (categoriaDto.getTitulo() == null) {
@@ -36,21 +44,9 @@ public class CategoriaValidation {
         if (categoriaDto.getCor() == null) {
             erros.add("O campo cor nao pode ser nulo");
         }
+
         if (!erros.isEmpty()) {
-            throw new NotAcceptableException("Contem campos nulos", erros);
-        }
-    }
-
-    private void validarSeContemPeloMenosUmCampoPreenchido(CategoriaDto categoriaDto) {
-        if (categoriaDto.getTitulo() == null && categoriaDto.getCor() == null) {
-            throw new NotAcceptableException("Nenhum campo enviado para alteracao!");
-        }
-    }
-
-    private void validarParaNaoTerTodosCampoPreenchidos(CategoriaDto categoriaDto) {
-        if (categoriaDto.getTitulo() != null && categoriaDto.getCor() != null) {
-            throw new NotAcceptableException("Essa API é para alterar somente parte dos campos porem " +
-                    "todos os campos foram enviados!");
+            throw new CategoriaFieldNotAcceptableException("Contem campos nulos", erros);
         }
     }
 
@@ -68,16 +64,31 @@ public class CategoriaValidation {
         }
 
         if (!erros.isEmpty()) {
-            throw new NotAcceptableException("Contem campos com numero de caracteres excedido", erros);
+            throw new CategoriaFieldNotAcceptableException("Contem campos com numero de caracteres excedido", erros);
         }
     }
 
-    private void validarId(CategoriaDto categoriaDto, List<CategoriaDto> listCategoriaDto) {
-        if (categoriaDto.getId() == null) {
-            return;
+    private void validarSeContemPeloMenosUmCampoPreenchido(CategoriaDto categoriaDto) {
+        if (categoriaDto.getTitulo() == null && categoriaDto.getCor() == null) {
+            throw new CategoriaFieldNotAcceptableException("Nenhum campo enviado para alteracao!");
         }
-        if (listCategoriaDto.stream().noneMatch(categoriaEntity -> categoriaEntity.getId().equals(categoriaDto.getId()))) {
-            throw new NotAcceptableException("Id nao encontrado! Favor enviar Id existente!");
+    }
+
+    private void validarParaNaoTerTodosCampoPreenchidos(CategoriaDto categoriaDto) {
+        if (categoriaDto.getTitulo() != null && categoriaDto.getCor() != null) {
+            throw new CategoriaFieldNotAcceptableException("Essa API é para alterar somente parte dos campos porem " +
+                    "todos os campos foram enviados!");
+        }
+    }
+
+    public void validarSeCategoriaDoVideoNaoFoiAlterada(CategoriaDto categoriaCadastrada,
+                                                        CategoriaDto categoriaEnviada) {
+        validarQueCamposNaoSejamNulos(categoriaEnviada);
+        validarTamanhoCampos(categoriaEnviada);
+
+        if (!categoriaEnviada.getCor().equals(categoriaCadastrada.getCor()) ||
+                !categoriaEnviada.getTitulo().equals(categoriaCadastrada.getTitulo())) {
+            throw new CategoriaFieldNotAcceptableException("Categoria nao pode ser alterada");
         }
     }
 }

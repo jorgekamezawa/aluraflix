@@ -1,7 +1,9 @@
 package com.aluraflix.domain.service;
 
 import com.aluraflix.domain.adapter.VideoPersistenceAdapter;
-import com.aluraflix.domain.exception.NotAcceptableException;
+import com.aluraflix.domain.builder.VideoBuilder;
+import com.aluraflix.domain.exception.categoria.CategoriaValueNotFoundException;
+import com.aluraflix.domain.exception.video.VideoFieldNotAcceptableException;
 import com.aluraflix.domain.model.VideoDto;
 import com.aluraflix.domain.validation.VideoValidation;
 import lombok.RequiredArgsConstructor;
@@ -15,6 +17,8 @@ public class VideoService {
 
     private final VideoPersistenceAdapter videoAdapter;
     private final VideoValidation videoValidation;
+    private final VideoBuilder videoBuilder;
+    private final CategoriaService categoriaService;
 
     public List<VideoDto> buscarTodosVideos() {
         return videoAdapter.buscarTodosVideos();
@@ -25,45 +29,44 @@ public class VideoService {
     }
 
     public VideoDto cadastrarVideo(VideoDto videoDto) {
-//      Certificar que nao contem Id, pois esse metodo é para cadastrar um novo video e nao atualizar
-        if (videoDto.getId() != null) {
-            throw new NotAcceptableException("Nao pode conter Id para realizar o cadastro de um novo video!");
+        if (videoDto.getCategoria() == null) {
+            videoDto.setCategoria(categoriaService.buscarCategoriaPadrao());
         }
-//      Validar se os campos foram preenchidos corretamente
-        videoValidation.validarCamposVideoParaSalvar(videoDto);
+
+        videoValidation.validarCamposVideoParaCadastrar(videoDto);
+        categoriaService.validarSeCategoriaDoVideoNaoFoiAlterada(videoDto.getCategoria());
 
         return videoAdapter.salvarVideo(videoDto);
     }
 
     public VideoDto alterarVideo(Long idVideo, VideoDto videoDto) {
+        validarVideoPorId(idVideo);
+
         videoDto.setId(idVideo);
+        videoValidation.validarCamposVideoParaCadastrar(videoDto);
 
-        List<VideoDto> listaVideoDto = buscarTodosVideos();
-//      Validar se os campos foram preenchidos corretamente
-        videoValidation.validarCamposVideoParaAlterar(videoDto, listaVideoDto);
-
-        return videoAdapter.salvarVideo(videoDto);
+        return videoAdapter.alterarVideo(videoDto);
     }
 
     public VideoDto alterarVideoParcialmente(Long idVideo, VideoDto videoDto) {
-        videoDto.setId(idVideo);
+        VideoDto videoCadastrado = validarVideoPorId(idVideo);
 
-        List<VideoDto> listaVideoDto = buscarTodosVideos();
-//      Validar se os campos foram preenchidos corretamente
-        videoValidation.validarCamposVideoParaAlterarParcialmente(videoDto, listaVideoDto);
+        videoValidation.validarCamposVideoParaAlterarParcialmente(videoDto);
 
-        return videoAdapter.salvarVideo(incluirDadosDaBaseEmUmVideoDtoIncompleto(videoDto, buscarVideoPorId(idVideo)));
+        return videoAdapter.alterarVideo(
+                videoBuilder.alterarVideoCadastrado(videoCadastrado, videoDto));
     }
 
     public void deletarVideo(Long idVideo) {
         videoAdapter.deletarVideoPorId(idVideo);
     }
 
-    private VideoDto incluirDadosDaBaseEmUmVideoDtoIncompleto(VideoDto videoDto, VideoDto videoDtoCadastrado) {
-        if (videoDto.getTitulo() == null) videoDto.setTitulo(videoDtoCadastrado.getTitulo());
-        if (videoDto.getDescricao() == null) videoDto.setDescricao(videoDtoCadastrado.getDescricao());
-        if (videoDto.getUrl() == null) videoDto.setUrl(videoDtoCadastrado.getUrl());
+    private VideoDto validarVideoPorId(Long idCategoria) {
+        try {
+            return buscarVideoPorId(idCategoria);
 
-        return videoDto;
+        } catch (CategoriaValueNotFoundException e) {
+            throw new VideoFieldNotAcceptableException(e.getMessage() + " Favor informar id existente!");
+        }
     }
 }

@@ -10,7 +10,9 @@ public interface CategoriaPersistenceAdapter {
 
     CategoriaDto buscarCategoriaPorId(Long id);
 
-    void deletarCategoriaPorId(Long idCategoria);
-
     CategoriaDto salvarCategoria(CategoriaDto categoriaDto);
+
+    CategoriaDto alterarCategoria(CategoriaDto categoriaDto);
+
+    void deletarCategoriaPorId(Long idCategoria);
 }

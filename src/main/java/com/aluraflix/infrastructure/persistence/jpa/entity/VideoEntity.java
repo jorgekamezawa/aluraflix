@@ -26,4 +26,7 @@ public class VideoEntity {
 
     @Column(name = "url", length = 50, nullable = false, unique = false)
     private String url;
+
+    @ManyToOne
+    private CategoriaEntity categoria;
 }

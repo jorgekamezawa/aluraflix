@@ -1,7 +1,11 @@
 package com.aluraflix.domain.service;
 
 import com.aluraflix.domain.adapter.CategoriaPersistenceAdapter;
-import com.aluraflix.domain.exception.NotAcceptableException;
+import com.aluraflix.domain.builder.CategoriaBuilder;
+import com.aluraflix.domain.exception.categoria.CategoriaFieldNotAcceptableException;
+import com.aluraflix.domain.exception.categoria.CategoriaValueNotFoundException;
+import com.aluraflix.domain.exception.categoria.CategoriaPadraoException;
+import com.aluraflix.domain.exception.video.VideoValueNotFoundException;
 import com.aluraflix.domain.model.CategoriaDto;
 import com.aluraflix.domain.validation.CategoriaValidation;
 import lombok.RequiredArgsConstructor;
@@ -15,9 +19,9 @@ public class CategoriaService {
 
     private final CategoriaPersistenceAdapter categoriaAdapter;
     private final CategoriaValidation categoriaValidation;
+    private final CategoriaBuilder categoriaBuilder;
 
     public List<CategoriaDto> buscarTodasCategorias() {
-
         return categoriaAdapter.buscarTodasCategorias();
     }
 
@@ -25,46 +29,53 @@ public class CategoriaService {
         return categoriaAdapter.buscarCategoriaPorId(idCategoria);
     }
 
-    public CategoriaDto cadastrarCategoria(CategoriaDto CategoriaDto) {
-//      Certificar que nao contem Id, pois esse metodo é para cadastrar uma nova categoria e nao atualizar
-        if (CategoriaDto.getId() != null) {
-            throw new NotAcceptableException("Nao pode conter Id para realizar o cadastro de uma nova categoria!");
-        }
-//      Validar se os campos foram preenchidos corretamente
-        categoriaValidation.validarCamposCategoriaParaSalvar(CategoriaDto);
-
-        return categoriaAdapter.salvarCategoria(CategoriaDto);
-    }
-
-    public CategoriaDto alterarCategoria(Long idCategoria, CategoriaDto categoriaDto) {
-        categoriaDto.setId(idCategoria);
-
-        List<CategoriaDto> listaCategoriaDto = buscarTodasCategorias();
-//      Validar se os campos foram preenchidos corretamente
-        categoriaValidation.validarCamposCategoriaParaAlterar(categoriaDto, listaCategoriaDto);
+    public CategoriaDto cadastrarCategoria(CategoriaDto categoriaDto) {
+        categoriaValidation.validarCamposCategoriaParaSalvar(categoriaDto);
 
         return categoriaAdapter.salvarCategoria(categoriaDto);
     }
 
-    public CategoriaDto alterarCategoriaParcialmente(Long idCategoria, CategoriaDto categoriaDto) {
+    public CategoriaDto alterarCategoriaCompleta(Long idCategoria, CategoriaDto categoriaDto) {
+        validarCategoriaPorId(idCategoria);
+
         categoriaDto.setId(idCategoria);
+        categoriaValidation.validarCamposCategoriaParaAlterar(categoriaDto);
 
-        List<CategoriaDto> listaCategoriaDto = buscarTodasCategorias();
-//      Validar se os campos foram preenchidos corretamente
-        categoriaValidation.validarCamposCategoriaParaAlterarParcialmente(categoriaDto, listaCategoriaDto);
+        return categoriaAdapter.alterarCategoria(categoriaDto);
+    }
 
-        return categoriaAdapter.salvarCategoria(
-                incluirDadosDaBaseEmUmaCategoriaDtoIncompleta(categoriaDto, buscarCategoriaPorId(idCategoria)));
+    public CategoriaDto alterarCategoriaParcialmente(Long idCategoria, CategoriaDto categoriaDto) {
+        CategoriaDto categoriaCadastrada = validarCategoriaPorId(idCategoria);
+
+        categoriaValidation.validarCamposCategoriaParaAlterarParcialmente(categoriaDto);
+
+        return categoriaAdapter.alterarCategoria(
+                categoriaBuilder.alterarCategoriaCadastrada(categoriaCadastrada, categoriaDto));
     }
 
     public void deletarCategoria(Long idCategoria) {
         categoriaAdapter.deletarCategoriaPorId(idCategoria);
     }
 
-    private CategoriaDto incluirDadosDaBaseEmUmaCategoriaDtoIncompleta(CategoriaDto categoriaDto, CategoriaDto categoriaDtoCadastrado) {
-        if (categoriaDto.getTitulo() == null) categoriaDto.setTitulo(categoriaDtoCadastrado.getTitulo());
-        if (categoriaDto.getCor() == null) categoriaDto.setCor(categoriaDtoCadastrado.getCor());
+    private CategoriaDto validarCategoriaPorId(Long idCategoria) {
+        try {
+            return buscarCategoriaPorId(idCategoria);
 
-        return categoriaDto;
+        } catch (CategoriaValueNotFoundException e) {
+            throw new CategoriaFieldNotAcceptableException(e.getMessage() + " Favor informar id existente!");
+        }
+    }
+
+    public CategoriaDto buscarCategoriaPadrao() {
+        try {
+            return buscarCategoriaPorId(1L);
+        } catch (VideoValueNotFoundException e) {
+            throw new CategoriaPadraoException("Categoria padrao nao encontrada!");
+        }
+    }
+
+    public void validarSeCategoriaDoVideoNaoFoiAlterada(CategoriaDto categoriaDto) {
+        CategoriaDto categoriaCadastrada = validarCategoriaPorId(categoriaDto.getId());
+        categoriaValidation.validarSeCategoriaDoVideoNaoFoiAlterada(categoriaCadastrada, categoriaDto);
     }
 }
