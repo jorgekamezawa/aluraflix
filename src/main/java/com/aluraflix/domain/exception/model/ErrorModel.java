@@ -18,5 +18,5 @@ public class ErrorModel {
     private final HttpStatus status;
     private final String message;
     private final List<String> errors;
-    private final LocalDateTime localDateTime;
+    private final String localDateTime;
 }

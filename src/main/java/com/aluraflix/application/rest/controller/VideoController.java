@@ -1,7 +1,7 @@
 package com.aluraflix.application.rest.controller;
 
-import com.aluraflix.domain.model.VideoDto;
-import com.aluraflix.domain.service.VideoService;
+import com.aluraflix.domain.video.model.VideoDto;
+import com.aluraflix.domain.video.service.VideoService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

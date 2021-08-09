@@ -1,7 +1,7 @@
 package com.aluraflix.application.rest.controller;
 
-import com.aluraflix.domain.model.CategoriaDto;
-import com.aluraflix.domain.service.CategoriaService;
+import com.aluraflix.domain.categoria.model.Categoria;
+import com.aluraflix.domain.categoria.service.CategoriaService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,38 +17,38 @@ public class CategoriaController {
     private final CategoriaService categoriaService;
 
     @GetMapping
-    public ResponseEntity<List<CategoriaDto>> buscarTodasCategorias() {
-        List<CategoriaDto> listaCategoriaDto = categoriaService.buscarTodasCategorias();
+    public ResponseEntity<List<Categoria>> buscarTodasCategorias() {
+        List<Categoria> listaCategoria = categoriaService.buscarTodasCategorias();
 
-        return ResponseEntity.ok(listaCategoriaDto);
+        return ResponseEntity.ok(listaCategoria);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<CategoriaDto> buscarCategoriaPorId(@PathVariable(name = "id") Long id) {
-        CategoriaDto categoriaDto = categoriaService.buscarCategoriaPorId(id);
+    public ResponseEntity<Categoria> buscarCategoriaPorId(@PathVariable(name = "id") Long id) {
+        Categoria categoria = categoriaService.buscarCategoriaPorId(id);
 
-        return ResponseEntity.ok(categoriaDto);
+        return ResponseEntity.ok(categoria);
     }
 
     @PostMapping
-    public ResponseEntity<CategoriaDto> cadastrarCategoria(@RequestBody CategoriaDto body) {
-        CategoriaDto categoriaDto = categoriaService.cadastrarCategoria(body);
+    public ResponseEntity<Categoria> cadastrarCategoria(@RequestBody Categoria body) {
+        Categoria categoria = categoriaService.cadastrarCategoria(body);
 
-        return new ResponseEntity<>(categoriaDto, HttpStatus.CREATED);
+        return new ResponseEntity<>(categoria, HttpStatus.CREATED);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<CategoriaDto> alterarCategoria(@PathVariable(name = "id") Long id, @RequestBody CategoriaDto body) {
-        CategoriaDto categoriaDto = categoriaService.alterarCategoriaCompleta(id, body);
+    public ResponseEntity<Categoria> alterarCategoria(@PathVariable(name = "id") Long id, @RequestBody Categoria body) {
+        Categoria categoria = categoriaService.alterarCategoriaCompleta(id, body);
 
-        return new ResponseEntity<>(categoriaDto, HttpStatus.CREATED);
+        return new ResponseEntity<>(categoria, HttpStatus.CREATED);
     }
 
     @PatchMapping("/{id}")
-    public ResponseEntity<CategoriaDto> alterarCategoriaParcialmente(@PathVariable(name = "id") Long id, @RequestBody CategoriaDto body) {
-        CategoriaDto categoriaDto = categoriaService.alterarCategoriaParcialmente(id, body);
+    public ResponseEntity<Categoria> alterarCategoriaParcialmente(@PathVariable(name = "id") Long id, @RequestBody Categoria body) {
+        Categoria categoria = categoriaService.alterarCategoriaParcialmente(id, body);
 
-        return new ResponseEntity<>(categoriaDto, HttpStatus.CREATED);
+        return new ResponseEntity<>(categoria, HttpStatus.CREATED);
     }
 
     @DeleteMapping("/{id}")

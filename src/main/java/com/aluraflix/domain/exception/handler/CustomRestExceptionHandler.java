@@ -1,17 +1,18 @@
 package com.aluraflix.domain.exception.handler;
 
+import com.aluraflix.domain.common.util.DataUtil;
 import com.aluraflix.domain.exception.FieldNotAcceptableException;
 import com.aluraflix.domain.exception.PersistenceException;
 import com.aluraflix.domain.exception.ValueNotFoundException;
-import com.aluraflix.domain.exception.categoria.CategoriaFieldNotAcceptableException;
-import com.aluraflix.domain.exception.categoria.CategoriaNoContentException;
-import com.aluraflix.domain.exception.categoria.CategoriaPersistenceException;
-import com.aluraflix.domain.exception.categoria.CategoriaValueNotFoundException;
+import com.aluraflix.domain.categoria.exception.CategoriaFieldNotAcceptableException;
+import com.aluraflix.domain.categoria.exception.CategoriaNoContentException;
+import com.aluraflix.domain.categoria.exception.CategoriaPersistenceException;
+import com.aluraflix.domain.categoria.exception.CategoriaValueNotFoundException;
 import com.aluraflix.domain.exception.model.ErrorModel;
-import com.aluraflix.domain.exception.video.VideoFieldNotAcceptableException;
-import com.aluraflix.domain.exception.video.VideoNoContentException;
-import com.aluraflix.domain.exception.video.VideoPersistenceException;
-import com.aluraflix.domain.exception.video.VideoValueNotFoundException;
+import com.aluraflix.domain.video.exception.VideoFieldNotAcceptableException;
+import com.aluraflix.domain.video.exception.VideoNoContentException;
+import com.aluraflix.domain.video.exception.VideoPersistenceException;
+import com.aluraflix.domain.video.exception.VideoValueNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -36,7 +37,7 @@ public class CustomRestExceptionHandler {
         ErrorModel errorModel = ErrorModel.builder()
                 .message(ex.getMessage())
                 .status(status)
-                .localDateTime(LocalDateTime.now()).build();
+                .localDateTime(DataUtil.formatarDataHora(LocalDateTime.now())).build();
 
         return new ResponseEntity<>(errorModel, status);
     }
@@ -48,7 +49,7 @@ public class CustomRestExceptionHandler {
         ErrorModel errorModel = ErrorModel.builder()
                 .message(ex.getMessage())
                 .status(status)
-                .localDateTime(LocalDateTime.now()).build();
+                .localDateTime(DataUtil.formatarDataHora(LocalDateTime.now())).build();
 
         return new ResponseEntity<>(errorModel, status);
     }
@@ -61,7 +62,7 @@ public class CustomRestExceptionHandler {
                 .message(ex.getMessage())
                 .status(status)
                 .errors(ex.getErrors())
-                .localDateTime(LocalDateTime.now()).build();
+                .localDateTime(DataUtil.formatarDataHora(LocalDateTime.now())).build();
 
         return new ResponseEntity<>(errorModel, status);
     }
