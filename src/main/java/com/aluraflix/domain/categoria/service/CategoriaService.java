@@ -34,11 +34,11 @@ public class CategoriaService {
         return categoriaAdapter.salvarCategoria(categoria);
     }
 
-    public Categoria alterarCategoriaCompleta(Long idCategoria, Categoria categoria) {
+    public Categoria alterarCategoriaCompletamente(Long idCategoria, Categoria categoria) {
         validarCategoriaPorId(idCategoria);
 
         categoria.setId(idCategoria);
-        categoriaValidationService.validarCamposCategoriaParaAlterar(categoria);
+        categoriaValidationService.validarCamposCategoriaParaAlterarCompletamente(categoria);
 
         return categoriaAdapter.alterarCategoria(categoria);
     }

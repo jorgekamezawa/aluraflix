@@ -3,7 +3,6 @@ package com.aluraflix.domain.video.service;
 import com.aluraflix.domain.categoria.service.CategoriaService;
 import com.aluraflix.domain.video.adapter.VideoPersistenceAdapter;
 import com.aluraflix.domain.video.builder.VideoBuilder;
-import com.aluraflix.domain.video.validation.VideoValidation;
 import com.aluraflix.domain.categoria.exception.CategoriaValueNotFoundException;
 import com.aluraflix.domain.video.exception.VideoFieldNotAcceptableException;
 import com.aluraflix.domain.video.model.VideoDto;
@@ -17,7 +16,7 @@ import java.util.List;
 public class VideoService {
 
     private final VideoPersistenceAdapter videoAdapter;
-    private final VideoValidation videoValidation;
+    private final VideoValidationService videoValidationService;
     private final VideoBuilder videoBuilder;
     private final CategoriaService categoriaService;
 
@@ -34,17 +33,17 @@ public class VideoService {
             videoDto.setCategoria(categoriaService.buscarCategoriaPadrao());
         }
 
-        videoValidation.validarCamposVideoParaCadastrar(videoDto);
+        videoValidationService.validarCamposVideoParaCadastrar(videoDto);
         categoriaService.validarSeCategoriaDoVideoNaoFoiAlterada(videoDto.getCategoria());
 
         return videoAdapter.salvarVideo(videoDto);
     }
 
-    public VideoDto alterarVideo(Long idVideo, VideoDto videoDto) {
+    public VideoDto alterarVideoCompletamente(Long idVideo, VideoDto videoDto) {
         validarVideoPorId(idVideo);
 
         videoDto.setId(idVideo);
-        videoValidation.validarCamposVideoParaCadastrar(videoDto);
+        videoValidationService.validarCamposVideoParaAlterarCompletamente(videoDto);
 
         return videoAdapter.alterarVideo(videoDto);
     }
@@ -52,7 +51,7 @@ public class VideoService {
     public VideoDto alterarVideoParcialmente(Long idVideo, VideoDto videoDto) {
         VideoDto videoCadastrado = validarVideoPorId(idVideo);
 
-        videoValidation.validarCamposVideoParaAlterarParcialmente(videoDto);
+        videoValidationService.validarCamposVideoParaAlterarParcialmente(videoDto);
 
         return videoAdapter.alterarVideo(
                 videoBuilder.alterarVideoCadastrado(videoCadastrado, videoDto));

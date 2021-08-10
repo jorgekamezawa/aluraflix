@@ -23,7 +23,7 @@ public class CategoriaValidationService {
         validarTamanhoCampos.validar(categoria);
     }
 
-    public void validarCamposCategoriaParaAlterar(Categoria categoria) {
+    public void validarCamposCategoriaParaAlterarCompletamente(Categoria categoria) {
         validarQueCamposNaoSejamNulos.validar(categoria);
         validarTamanhoCampos.validar(categoria);
     }

@@ -39,7 +39,7 @@ public class VideoController {
 
     @PutMapping("/{id}")
     public ResponseEntity<VideoDto> alterarVideo(@PathVariable(name = "id") Long id, @RequestBody VideoDto body) {
-        VideoDto videoDto = videoService.alterarVideo(id, body);
+        VideoDto videoDto = videoService.alterarVideoCompletamente(id, body);
 
         return new ResponseEntity<>(videoDto, HttpStatus.CREATED);
     }
