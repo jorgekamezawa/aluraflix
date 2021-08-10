@@ -1,6 +1,6 @@
 package com.aluraflix.infrastructure.persistence.jpa.mapper;
 
-import com.aluraflix.domain.video.model.VideoDto;
+import com.aluraflix.domain.video.model.Video;
 import com.aluraflix.infrastructure.persistence.jpa.entity.VideoPersistenceEntity;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -14,28 +14,28 @@ public class VideoMapper {
 
     private final CategoriaMapper categoriaMapper;
 
-    public List<VideoDto> converterListaVideoEntityParaListaVideoDto(List<VideoPersistenceEntity> listaEntity) {
-        List<VideoDto> listaDto = new ArrayList<>();
-        listaEntity.forEach(entity -> listaDto.add(converterVideoEntityParaVideoDto(entity)));
+    public List<Video> converterListaVideoEntityParaListaVideoModel(List<VideoPersistenceEntity> listaEntity) {
+        List<Video> listaModel = new ArrayList<>();
+        listaEntity.forEach(entity -> listaModel.add(converterVideoEntityParaVideoModel(entity)));
 
-        return listaDto;
+        return listaModel;
     }
 
-    public VideoDto converterVideoEntityParaVideoDto(VideoPersistenceEntity entity) {
-        return VideoDto.builder()
+    public Video converterVideoEntityParaVideoModel(VideoPersistenceEntity entity) {
+        return Video.builder()
                 .id(entity.getId())
                 .titulo(entity.getTitulo())
                 .descricao(entity.getDescricao())
                 .url(entity.getUrl())
-                .categoria(categoriaMapper.converterCategoriaEntityParaCategoriaDto(entity.getCategoria())).build();
+                .categoria(categoriaMapper.converterCategoriaEntityParaCategoriaModel(entity.getCategoria())).build();
     }
 
-    public VideoPersistenceEntity converterVideoDtoParaVideoEntity(VideoDto dto) {
+    public VideoPersistenceEntity converterVideoModelParaVideoEntity(Video model) {
         return VideoPersistenceEntity.builder()
-                .id(dto.getId())
-                .titulo(dto.getTitulo())
-                .descricao(dto.getDescricao())
-                .url(dto.getUrl())
-                .categoria(categoriaMapper.converterCategoriaDtoParaCategoriaEntity(dto.getCategoria())).build();
+                .id(model.getId())
+                .titulo(model.getTitulo())
+                .descricao(model.getDescricao())
+                .url(model.getUrl())
+                .categoria(categoriaMapper.converterCategoriaModelParaCategoriaEntity(model.getCategoria())).build();
     }
 }

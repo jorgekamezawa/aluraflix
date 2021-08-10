@@ -2,7 +2,9 @@ package com.aluraflix.domain.categoria.validation;
 
 import com.aluraflix.domain.categoria.exception.CategoriaFieldNotAcceptableException;
 import com.aluraflix.domain.categoria.model.Categoria;
+import org.springframework.stereotype.Component;
 
+@Component
 public class CategoriaValidarQueIdCategoriaSejaNulo {
 
     public void validar(Categoria categoria) {

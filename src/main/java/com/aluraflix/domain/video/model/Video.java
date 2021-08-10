@@ -13,7 +13,7 @@ import static com.fasterxml.jackson.annotation.JsonInclude.Include;
 @AllArgsConstructor
 @NoArgsConstructor
 @JsonInclude(Include.NON_NULL)
-public class VideoDto {
+public class Video {
 
     @JsonProperty("id")
     private Long id;

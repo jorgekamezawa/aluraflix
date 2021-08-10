@@ -1,7 +1,7 @@
 package com.aluraflix.infrastructure.persistence.jpa.mapper;
 
-import com.aluraflix.infrastructure.persistence.jpa.entity.CategoriaPersistenceEntity;
 import com.aluraflix.domain.categoria.model.Categoria;
+import com.aluraflix.infrastructure.persistence.jpa.entity.CategoriaPersistenceEntity;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
@@ -10,14 +10,14 @@ import java.util.List;
 @Component
 public class CategoriaMapper {
 
-    public List<Categoria> converterListaCategoriaEntityParaListaCategoriaDto(List<CategoriaPersistenceEntity> listaEntity) {
-        List<Categoria> listaDto = new ArrayList<>();
-        listaEntity.forEach(entity -> listaDto.add(converterCategoriaEntityParaCategoriaDto(entity)));
+    public List<Categoria> converterListaCategoriaEntityParaListaCategoriaModel(List<CategoriaPersistenceEntity> listaEntity) {
+        List<Categoria> listaModel = new ArrayList<>();
+        listaEntity.forEach(entity -> listaModel.add(converterCategoriaEntityParaCategoriaModel(entity)));
 
-        return listaDto;
+        return listaModel;
     }
 
-    public Categoria converterCategoriaEntityParaCategoriaDto(CategoriaPersistenceEntity entity) {
+    public Categoria converterCategoriaEntityParaCategoriaModel(CategoriaPersistenceEntity entity) {
         return Categoria
                 .builder()
                 .id(entity.getId())
@@ -25,10 +25,10 @@ public class CategoriaMapper {
                 .cor(entity.getCor()).build();
     }
 
-    public CategoriaPersistenceEntity converterCategoriaDtoParaCategoriaEntity(Categoria dto) {
+    public CategoriaPersistenceEntity converterCategoriaModelParaCategoriaEntity(Categoria model) {
         return CategoriaPersistenceEntity.builder()
-                .id(dto.getId())
-                .titulo(dto.getTitulo())
-                .cor(dto.getCor()).build();
+                .id(model.getId())
+                .titulo(model.getTitulo())
+                .cor(model.getCor()).build();
     }
 }

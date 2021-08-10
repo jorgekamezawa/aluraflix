@@ -1,7 +1,7 @@
 package com.aluraflix.domain.video.validation;
 
 import com.aluraflix.domain.video.exception.VideoFieldNotAcceptableException;
-import com.aluraflix.domain.video.model.VideoDto;
+import com.aluraflix.domain.video.model.Video;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
@@ -10,19 +10,19 @@ import java.util.List;
 @Component
 public class VideoValidarQueCamposNaoSejamNulos {
 
-    public void validar(VideoDto videoDto) {
+    public void validar(Video video) {
         List<String> erros = new ArrayList<>();
 
-        if (videoDto.getTitulo() == null) {
+        if (video.getTitulo() == null) {
             erros.add("O campo titulo nao pode ser nulo");
         }
-        if (videoDto.getDescricao() == null) {
+        if (video.getDescricao() == null) {
             erros.add("O campo descricao nao pode ser nulo");
         }
-        if (videoDto.getUrl() == null) {
+        if (video.getUrl() == null) {
             erros.add("O campo url nao pode ser nulo");
         }
-        if (videoDto.getCategoria() == null) {
+        if (video.getCategoria() == null) {
             erros.add("A categoria nao pode ser nula");
         }
 

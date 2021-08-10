@@ -1,11 +1,11 @@
 package com.aluraflix.domain.video.service;
 
+import com.aluraflix.domain.categoria.exception.CategoriaValueNotFoundException;
 import com.aluraflix.domain.categoria.service.CategoriaService;
 import com.aluraflix.domain.video.adapter.VideoPersistenceAdapter;
 import com.aluraflix.domain.video.builder.VideoBuilder;
-import com.aluraflix.domain.categoria.exception.CategoriaValueNotFoundException;
 import com.aluraflix.domain.video.exception.VideoFieldNotAcceptableException;
-import com.aluraflix.domain.video.model.VideoDto;
+import com.aluraflix.domain.video.model.Video;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -20,53 +20,57 @@ public class VideoService {
     private final VideoBuilder videoBuilder;
     private final CategoriaService categoriaService;
 
-    public List<VideoDto> buscarTodosVideos() {
+    public List<Video> buscarTodosVideos() {
         return videoAdapter.buscarTodosVideos();
     }
 
-    public VideoDto buscarVideoPorId(Long idVideo) {
+    public Video buscarVideoPorId(Long idVideo) {
         return videoAdapter.buscarVideoPorId(idVideo);
     }
 
-    public VideoDto cadastrarVideo(VideoDto videoDto) {
-        if (videoDto.getCategoria() == null) {
-            videoDto.setCategoria(categoriaService.buscarCategoriaPadrao());
+    public Video cadastrarVideo(Video video) {
+        if (video.getCategoria() == null) {
+            video.setCategoria(categoriaService.buscarCategoriaPadrao());
         }
 
-        videoValidationService.validarCamposVideoParaCadastrar(videoDto);
-        categoriaService.validarSeCategoriaDoVideoNaoFoiAlterada(videoDto.getCategoria());
+        videoValidationService.validarCamposVideoParaCadastrar(video);
+        categoriaService.validarSeCategoriaDoVideoNaoFoiAlterada(video.getCategoria());
 
-        return videoAdapter.salvarVideo(videoDto);
+        return videoAdapter.salvarVideo(video);
     }
 
-    public VideoDto alterarVideoCompletamente(Long idVideo, VideoDto videoDto) {
+    public Video alterarVideoCompletamente(Long idVideo, Video video) {
         validarVideoPorId(idVideo);
 
-        videoDto.setId(idVideo);
-        videoValidationService.validarCamposVideoParaAlterarCompletamente(videoDto);
+        video.setId(idVideo);
+        videoValidationService.validarCamposVideoParaAlterarCompletamente(video);
 
-        return videoAdapter.alterarVideo(videoDto);
+        return videoAdapter.alterarVideo(video);
     }
 
-    public VideoDto alterarVideoParcialmente(Long idVideo, VideoDto videoDto) {
-        VideoDto videoCadastrado = validarVideoPorId(idVideo);
+    public Video alterarVideoParcialmente(Long idVideo, Video video) {
+        Video videoCadastrado = validarVideoPorId(idVideo);
 
-        videoValidationService.validarCamposVideoParaAlterarParcialmente(videoDto);
+        videoValidationService.validarCamposVideoParaAlterarParcialmente(video);
 
         return videoAdapter.alterarVideo(
-                videoBuilder.alterarVideoCadastrado(videoCadastrado, videoDto));
+                videoBuilder.alterarVideoCadastrado(videoCadastrado, video));
     }
 
     public void deletarVideo(Long idVideo) {
         videoAdapter.deletarVideoPorId(idVideo);
     }
 
-    private VideoDto validarVideoPorId(Long idCategoria) {
+    private Video validarVideoPorId(Long idCategoria) {
         try {
             return buscarVideoPorId(idCategoria);
 
         } catch (CategoriaValueNotFoundException e) {
             throw new VideoFieldNotAcceptableException(e.getMessage() + " Favor informar id existente!");
         }
+    }
+
+    public List<Video> buscarVideoPorCategoria(Long idCateogria) {
+        return videoAdapter.buscarVideoPorCategoria(categoriaService.buscarCategoriaPorId(idCateogria));
     }
 }

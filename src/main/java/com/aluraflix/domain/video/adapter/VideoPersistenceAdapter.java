@@ -1,18 +1,21 @@
 package com.aluraflix.domain.video.adapter;
 
-import com.aluraflix.domain.video.model.VideoDto;
+import com.aluraflix.domain.categoria.model.Categoria;
+import com.aluraflix.domain.video.model.Video;
 
 import java.util.List;
 
 public interface VideoPersistenceAdapter {
 
-    List<VideoDto> buscarTodosVideos();
+    List<Video> buscarTodosVideos();
 
-    VideoDto buscarVideoPorId(Long id);
+    Video buscarVideoPorId(Long id);
 
-    VideoDto salvarVideo(VideoDto videoDto);
+    Video salvarVideo(Video video);
 
-    VideoDto alterarVideo(VideoDto videoDto);
+    Video alterarVideo(Video video);
 
     void deletarVideoPorId(Long idVideo);
+
+    List<Video> buscarVideoPorCategoria(Categoria categoria);
 }

@@ -1,6 +1,6 @@
 package com.aluraflix.domain.video.service;
 
-import com.aluraflix.domain.video.model.VideoDto;
+import com.aluraflix.domain.video.model.Video;
 import com.aluraflix.domain.video.validation.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -16,22 +16,22 @@ public class VideoValidationService {
     private final VideoValidarSeContemPeloMenosUmCampoPreenchido validarSeContemPeloMenosUmCampoPreenchido;
     private final VideoValidarParaNaoTerTodosCampoPreenchidos validarParaNaoTerTodosCampoPreenchidos;
 
-    public void validarCamposVideoParaCadastrar(VideoDto videoDto) {
-        validarQueIdSejaNulo.validar(videoDto);
-        validarQueCamposNaoSejamNulos.validar(videoDto);
-        validarTamanhoCampos.validar(videoDto);
-        validarUrl.validar(videoDto.getUrl());
+    public void validarCamposVideoParaCadastrar(Video video) {
+        validarQueIdSejaNulo.validar(video);
+        validarQueCamposNaoSejamNulos.validar(video);
+        validarTamanhoCampos.validar(video);
+        validarUrl.validar(video.getUrl());
     }
 
-    public void validarCamposVideoParaAlterarCompletamente(VideoDto videoDto) {
-        validarQueCamposNaoSejamNulos.validar(videoDto);
-        validarTamanhoCampos.validar(videoDto);
-        validarUrl.validar(videoDto.getUrl());
+    public void validarCamposVideoParaAlterarCompletamente(Video video) {
+        validarQueCamposNaoSejamNulos.validar(video);
+        validarTamanhoCampos.validar(video);
+        validarUrl.validar(video.getUrl());
     }
 
-    public void validarCamposVideoParaAlterarParcialmente(VideoDto videoDto) {
-        validarSeContemPeloMenosUmCampoPreenchido.validar(videoDto);
-        validarParaNaoTerTodosCampoPreenchidos.validar(videoDto);
-        validarTamanhoCampos.validar(videoDto);
+    public void validarCamposVideoParaAlterarParcialmente(Video video) {
+        validarSeContemPeloMenosUmCampoPreenchido.validar(video);
+        validarParaNaoTerTodosCampoPreenchidos.validar(video);
+        validarTamanhoCampos.validar(video);
     }
 }

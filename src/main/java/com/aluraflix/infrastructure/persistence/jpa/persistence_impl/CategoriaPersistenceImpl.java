@@ -1,9 +1,9 @@
-package com.aluraflix.infrastructure.persistence.jpa.persistence_adapter_impl;
+package com.aluraflix.infrastructure.persistence.jpa.persistence_impl;
 
 import com.aluraflix.domain.categoria.adapter.CategoriaPersistenceAdapter;
-import com.aluraflix.domain.categoria.exception.CategoriaPersistenceException;
 import com.aluraflix.domain.categoria.exception.CategoriaFieldNotAcceptableException;
 import com.aluraflix.domain.categoria.exception.CategoriaNoContentException;
+import com.aluraflix.domain.categoria.exception.CategoriaPersistenceException;
 import com.aluraflix.domain.categoria.exception.CategoriaValueNotFoundException;
 import com.aluraflix.domain.categoria.model.Categoria;
 import com.aluraflix.infrastructure.persistence.jpa.entity.CategoriaPersistenceEntity;
@@ -25,53 +25,53 @@ public class CategoriaPersistenceImpl implements CategoriaPersistenceAdapter {
 
     @Override
     public List<Categoria> buscarTodasCategorias() {
-        List<CategoriaPersistenceEntity> listaCategoriaPersistenceEntity = categoriaRepository.findAll();
+        List<CategoriaPersistenceEntity> listaCategoriaEntity = categoriaRepository.findAll();
 
-        if (listaCategoriaPersistenceEntity.isEmpty()) {
+        if (listaCategoriaEntity.isEmpty()) {
             throw new CategoriaNoContentException();
         }
 
-        return categoriaMapper.converterListaCategoriaEntityParaListaCategoriaDto(listaCategoriaPersistenceEntity);
+        return categoriaMapper.converterListaCategoriaEntityParaListaCategoriaModel(listaCategoriaEntity);
     }
 
     @Override
     public Categoria buscarCategoriaPorId(Long idCategoria) {
-        CategoriaPersistenceEntity categoriaPersistenceEntity = Optional.ofNullable(categoriaRepository.findById(idCategoria)
+        CategoriaPersistenceEntity categoriaEntity = Optional.ofNullable(categoriaRepository.findById(idCategoria)
                 .orElseThrow(() -> new CategoriaValueNotFoundException(
                         "Categoria com Id " + idCategoria + " nao encontrado!"))).get();
 
-        return categoriaMapper.converterCategoriaEntityParaCategoriaDto(categoriaPersistenceEntity);
+        return categoriaMapper.converterCategoriaEntityParaCategoriaModel(categoriaEntity);
     }
 
     @Override
     @Transactional
-    public Categoria salvarCategoria(Categoria categoria) {
-        CategoriaPersistenceEntity categoriaPersistenceEntity = categoriaMapper.converterCategoriaDtoParaCategoriaEntity(categoria);
+    public Categoria salvarCategoria(Categoria categoriaModel) {
+        CategoriaPersistenceEntity categoriaEntity = categoriaMapper.converterCategoriaModelParaCategoriaEntity(categoriaModel);
 
         try {
-            categoriaPersistenceEntity = categoriaRepository.save(categoriaPersistenceEntity);
+            categoriaEntity = categoriaRepository.save(categoriaEntity);
 
         } catch (RuntimeException e) {
             throw new CategoriaPersistenceException("Erro ao cadastrar categoria!");
         }
 
-        return categoriaMapper.converterCategoriaEntityParaCategoriaDto(categoriaPersistenceEntity);
+        return categoriaMapper.converterCategoriaEntityParaCategoriaModel(categoriaEntity);
     }
 
     @Override
     @Transactional
-    public Categoria alterarCategoria(Categoria categoria) {
-        return salvarCategoria(categoria);
+    public Categoria alterarCategoria(Categoria categoriaModel) {
+        return salvarCategoria(categoriaModel);
     }
 
     @Override
     @Transactional
     public void deletarCategoriaPorId(Long idCategoria) {
         try {
-            Categoria categoria = buscarCategoriaPorId(idCategoria);
-            CategoriaPersistenceEntity categoriaPersistenceEntity = categoriaMapper.converterCategoriaDtoParaCategoriaEntity(categoria);
+            Categoria categoriaModel = buscarCategoriaPorId(idCategoria);
+            CategoriaPersistenceEntity categoriaEntity = categoriaMapper.converterCategoriaModelParaCategoriaEntity(categoriaModel);
 
-            categoriaRepository.delete(categoriaPersistenceEntity);
+            categoriaRepository.delete(categoriaEntity);
 
         } catch (CategoriaValueNotFoundException e) {
             throw new CategoriaFieldNotAcceptableException(e.getMessage() + " Favor informar id existente!");
