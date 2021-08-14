@@ -1,13 +1,13 @@
 package com.aluraflix.domain.video.adapter;
 
 import com.aluraflix.domain.categoria.model.Categoria;
+import com.aluraflix.domain.common.model.PageDto;
 import com.aluraflix.domain.video.model.Video;
-
-import java.util.List;
+import org.springframework.data.domain.Pageable;
 
 public interface VideoPersistenceAdapter {
 
-    List<Video> buscarTodosVideos();
+    PageDto<Video> buscarTodaListaPaginadaDeVideos(Pageable paginavel);
 
     Video buscarVideoPorId(Long id);
 
@@ -17,5 +17,7 @@ public interface VideoPersistenceAdapter {
 
     void deletarVideoPorId(Long idVideo);
 
-    List<Video> buscarVideoPorCategoria(Categoria categoria);
+    PageDto<Video> buscarListaPaginadaDeVideosPorCategoria(Categoria categoria, Pageable paginavel);
+
+    PageDto<Video> buscarListaPaginadaVideoPorTitulo(String tituloVideo, Pageable paginavel);
 }

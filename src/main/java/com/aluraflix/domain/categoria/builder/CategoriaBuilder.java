@@ -7,8 +7,8 @@ import org.springframework.stereotype.Component;
 public class CategoriaBuilder {
 
     public Categoria alterarCategoriaCadastrada(Categoria categoriaCadastrado, Categoria categoria) {
-        if (categoria.getTitulo() == null) categoriaCadastrado.setTitulo(categoria.getTitulo());
-        if (categoria.getCor() == null) categoriaCadastrado.setCor(categoria.getCor());
+        if (categoria.getTitulo() != null) categoriaCadastrado.setTitulo(categoria.getTitulo());
+        if (categoria.getCor() != null) categoriaCadastrado.setCor(categoria.getCor());
 
         return categoriaCadastrado;
     }

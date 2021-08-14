@@ -1,12 +1,12 @@
 package com.aluraflix.domain.categoria.adapter;
 
 import com.aluraflix.domain.categoria.model.Categoria;
-
-import java.util.List;
+import com.aluraflix.domain.common.model.PageDto;
+import org.springframework.data.domain.Pageable;
 
 public interface CategoriaPersistenceAdapter {
 
-    List<Categoria> buscarTodasCategorias();
+    PageDto<Categoria> buscarTodaListaPaginadaDeCategorias(Pageable paginavel);
 
     Categoria buscarCategoriaPorId(Long id);
 

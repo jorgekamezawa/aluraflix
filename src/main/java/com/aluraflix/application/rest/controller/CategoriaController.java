@@ -2,12 +2,12 @@ package com.aluraflix.application.rest.controller;
 
 import com.aluraflix.domain.categoria.model.Categoria;
 import com.aluraflix.domain.categoria.service.CategoriaService;
+import com.aluraflix.domain.common.model.PageDto;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 @RequestMapping("/categorias")
@@ -17,10 +17,10 @@ public class CategoriaController {
     private final CategoriaService categoriaService;
 
     @GetMapping
-    public ResponseEntity<List<Categoria>> buscarTodasCategorias() {
-        List<Categoria> listaCategoria = categoriaService.buscarTodasCategorias();
+    public ResponseEntity<PageDto<Categoria>> buscarTodaListaPaginadaDeCategorias(Pageable paginavel) {
+        PageDto<Categoria> paginaCategoria = categoriaService.buscarTodaListaPaginadaDeCategorias(paginavel);
 
-        return ResponseEntity.ok(listaCategoria);
+        return ResponseEntity.ok(paginaCategoria);
     }
 
     @GetMapping("/{id}")

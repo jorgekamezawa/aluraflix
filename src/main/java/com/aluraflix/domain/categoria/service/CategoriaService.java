@@ -6,11 +6,11 @@ import com.aluraflix.domain.categoria.exception.CategoriaFieldNotAcceptableExcep
 import com.aluraflix.domain.categoria.exception.CategoriaPadraoException;
 import com.aluraflix.domain.categoria.exception.CategoriaValueNotFoundException;
 import com.aluraflix.domain.categoria.model.Categoria;
+import com.aluraflix.domain.common.model.PageDto;
 import com.aluraflix.domain.video.exception.VideoValueNotFoundException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -20,8 +20,8 @@ public class CategoriaService {
     private final CategoriaValidationService categoriaValidationService;
     private final CategoriaBuilder categoriaBuilder;
 
-    public List<Categoria> buscarTodasCategorias() {
-        return categoriaAdapter.buscarTodasCategorias();
+    public PageDto<Categoria> buscarTodaListaPaginadaDeCategorias(Pageable paginavel) {
+        return categoriaAdapter.buscarTodaListaPaginadaDeCategorias(paginavel);
     }
 
     public Categoria buscarCategoriaPorId(Long idCategoria) {

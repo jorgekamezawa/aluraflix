@@ -2,14 +2,14 @@ package com.aluraflix.domain.video.service;
 
 import com.aluraflix.domain.categoria.exception.CategoriaValueNotFoundException;
 import com.aluraflix.domain.categoria.service.CategoriaService;
+import com.aluraflix.domain.common.model.PageDto;
 import com.aluraflix.domain.video.adapter.VideoPersistenceAdapter;
 import com.aluraflix.domain.video.builder.VideoBuilder;
 import com.aluraflix.domain.video.exception.VideoFieldNotAcceptableException;
 import com.aluraflix.domain.video.model.Video;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -20,8 +20,11 @@ public class VideoService {
     private final VideoBuilder videoBuilder;
     private final CategoriaService categoriaService;
 
-    public List<Video> buscarTodosVideos() {
-        return videoAdapter.buscarTodosVideos();
+    public PageDto<Video> buscarListaPaginadaDeVideosPorFiltro(String titulo, Pageable paginavel) {
+        if (titulo != null) {
+            return videoAdapter.buscarListaPaginadaVideoPorTitulo(titulo, paginavel);
+        }
+        return videoAdapter.buscarTodaListaPaginadaDeVideos(paginavel);
     }
 
     public Video buscarVideoPorId(Long idVideo) {
@@ -70,7 +73,7 @@ public class VideoService {
         }
     }
 
-    public List<Video> buscarVideoPorCategoria(Long idCateogria) {
-        return videoAdapter.buscarVideoPorCategoria(categoriaService.buscarCategoriaPorId(idCateogria));
+    public PageDto<Video> buscarListaPaginadaDeVideosPorCategoria(Long idCateogria, Pageable paginavel) {
+        return videoAdapter.buscarListaPaginadaDeVideosPorCategoria(categoriaService.buscarCategoriaPorId(idCateogria), paginavel);
     }
 }

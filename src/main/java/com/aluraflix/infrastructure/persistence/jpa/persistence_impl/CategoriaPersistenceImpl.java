@@ -6,10 +6,13 @@ import com.aluraflix.domain.categoria.exception.CategoriaNoContentException;
 import com.aluraflix.domain.categoria.exception.CategoriaPersistenceException;
 import com.aluraflix.domain.categoria.exception.CategoriaValueNotFoundException;
 import com.aluraflix.domain.categoria.model.Categoria;
+import com.aluraflix.domain.common.model.PageDto;
 import com.aluraflix.infrastructure.persistence.jpa.entity.CategoriaPersistenceEntity;
 import com.aluraflix.infrastructure.persistence.jpa.mapper.CategoriaMapper;
 import com.aluraflix.infrastructure.persistence.jpa.respository.CategoriaRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -24,14 +27,16 @@ public class CategoriaPersistenceImpl implements CategoriaPersistenceAdapter {
     private final CategoriaMapper categoriaMapper;
 
     @Override
-    public List<Categoria> buscarTodasCategorias() {
-        List<CategoriaPersistenceEntity> listaCategoriaEntity = categoriaRepository.findAll();
+    public PageDto<Categoria> buscarTodaListaPaginadaDeCategorias(Pageable paginavel) {
+        Page<CategoriaPersistenceEntity> paginaCategoriaEntity = categoriaRepository.findAll(paginavel);
 
-        if (listaCategoriaEntity.isEmpty()) {
+        if (paginaCategoriaEntity.getContent().isEmpty()) {
             throw new CategoriaNoContentException();
         }
 
-        return categoriaMapper.converterListaCategoriaEntityParaListaCategoriaModel(listaCategoriaEntity);
+        List<Categoria> listaCategorias = categoriaMapper.converterListaCategoriaEntityParaListaCategoriaModel(paginaCategoriaEntity.getContent());
+
+        return new PageDto<>(listaCategorias, paginaCategoriaEntity.getTotalElements(), paginaCategoriaEntity.getTotalPages());
     }
 
     @Override

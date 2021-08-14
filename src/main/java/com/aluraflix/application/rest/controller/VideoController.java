@@ -1,13 +1,13 @@
 package com.aluraflix.application.rest.controller;
 
+import com.aluraflix.domain.common.model.PageDto;
 import com.aluraflix.domain.video.model.Video;
 import com.aluraflix.domain.video.service.VideoService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 @RequestMapping("/videos")
@@ -17,10 +17,12 @@ public class VideoController {
     private final VideoService videoService;
 
     @GetMapping
-    public ResponseEntity<List<Video>> buscarTodosVideos() {
-        List<Video> listaVideo = videoService.buscarTodosVideos();
+    public ResponseEntity<PageDto<Video>> buscarListaPaginadaDeVideosPorFiltro(
+            @RequestParam(name = "titulo", required = false) String titulo,
+            Pageable paginavel) {
+        PageDto<Video> paginaVideo = videoService.buscarListaPaginadaDeVideosPorFiltro(titulo, paginavel);
 
-        return ResponseEntity.ok(listaVideo);
+        return ResponseEntity.ok(paginaVideo);
     }
 
     @GetMapping("/{id}")
@@ -59,10 +61,12 @@ public class VideoController {
     }
 
     @GetMapping("/categorias/{id_categoria}")
-    public ResponseEntity<List<Video>> buscarVideoPorCategoria(@PathVariable(name = "id_categoria") Long idCateogria){
+    public ResponseEntity<PageDto<Video>> buscarListaPaginadaDeVideosPorCategoria(
+            @PathVariable(name = "id_categoria") Long idCateogria,
+            Pageable paginavel) {
 
-        List<Video> listaVideo = videoService.buscarVideoPorCategoria(idCateogria);
+        PageDto<Video> paginaVideo = videoService.buscarListaPaginadaDeVideosPorCategoria(idCateogria, paginavel);
 
-        return ResponseEntity.ok(listaVideo);
+        return ResponseEntity.ok(paginaVideo);
     }
 }

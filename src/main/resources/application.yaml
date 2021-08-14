@@ -5,9 +5,9 @@ spring:
     name: "AluraFlix"
   datasource:
     driverClassName: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://localhost:3306/alch
+    url: jdbc:mysql://aluraflixdb.csjg1fmwjtxz.us-west-1.rds.amazonaws.com:3306/alch
     username: root
-    password: root
+    password: admin123
   jpa:
     hibernate.ddl-auto: update
     generate-ddl: true

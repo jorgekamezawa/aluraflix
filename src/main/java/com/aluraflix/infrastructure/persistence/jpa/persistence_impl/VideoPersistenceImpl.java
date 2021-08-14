@@ -3,6 +3,7 @@ package com.aluraflix.infrastructure.persistence.jpa.persistence_impl;
 import com.aluraflix.domain.categoria.exception.CategoriaPersistenceException;
 import com.aluraflix.domain.categoria.exception.CategoriaValueNotFoundException;
 import com.aluraflix.domain.categoria.model.Categoria;
+import com.aluraflix.domain.common.model.PageDto;
 import com.aluraflix.domain.video.adapter.VideoPersistenceAdapter;
 import com.aluraflix.domain.video.exception.VideoFieldNotAcceptableException;
 import com.aluraflix.domain.video.exception.VideoNoContentException;
@@ -15,6 +16,8 @@ import com.aluraflix.infrastructure.persistence.jpa.mapper.CategoriaMapper;
 import com.aluraflix.infrastructure.persistence.jpa.mapper.VideoMapper;
 import com.aluraflix.infrastructure.persistence.jpa.respository.VideoRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -30,14 +33,16 @@ public class VideoPersistenceImpl implements VideoPersistenceAdapter {
     private final CategoriaMapper categoriaMapper;
 
     @Override
-    public List<Video> buscarTodosVideos() {
-        List<VideoPersistenceEntity> listaVideoEntity = videoRepository.findAll();
+    public PageDto<Video> buscarTodaListaPaginadaDeVideos(Pageable paginavel) {
+        Page<VideoPersistenceEntity> paginaVideoEntity = videoRepository.findAll(paginavel);
 
-        if (listaVideoEntity.isEmpty()) {
+        if (paginaVideoEntity.getContent().isEmpty()) {
             throw new VideoNoContentException();
         }
 
-        return videoMapper.converterListaVideoEntityParaListaVideoModel(listaVideoEntity);
+        List<Video> listaVideos = videoMapper.converterListaVideoEntityParaListaVideoModel(paginaVideoEntity.getContent());
+
+        return new PageDto<>(listaVideos, paginaVideoEntity.getTotalElements(), paginaVideoEntity.getTotalPages());
     }
 
     @Override
@@ -87,15 +92,32 @@ public class VideoPersistenceImpl implements VideoPersistenceAdapter {
     }
 
     @Override
-    public List<Video> buscarVideoPorCategoria(Categoria categoriaModel) {
+    public PageDto<Video> buscarListaPaginadaDeVideosPorCategoria(Categoria categoriaModel, Pageable paginavel) {
         CategoriaPersistenceEntity categoriaEntity =
                 categoriaMapper.converterCategoriaModelParaCategoriaEntity(categoriaModel);
-        List<VideoPersistenceEntity> listaVideoEntity = videoRepository.findAllByCategoria(categoriaEntity);
 
-        if (listaVideoEntity.isEmpty()) {
+        Page<VideoPersistenceEntity> paginaVideoEntity = videoRepository.findAllByCategoria(categoriaEntity, paginavel);
+
+        if (paginaVideoEntity.getContent().isEmpty()) {
             throw new VideoNoContentException();
         }
 
-        return videoMapper.converterListaVideoEntityParaListaVideoModel(listaVideoEntity);
+        List<Video> listaVideos = videoMapper.converterListaVideoEntityParaListaVideoModel(paginaVideoEntity.getContent());
+
+        return new PageDto<>(listaVideos, paginaVideoEntity.getTotalElements(), paginaVideoEntity.getTotalPages());
+    }
+
+
+    @Override
+    public PageDto<Video> buscarListaPaginadaVideoPorTitulo(String tituloVideo, Pageable paginavel) {
+        Page<VideoPersistenceEntity> paginaVideoEntity = videoRepository.findAllByTituloContaining(tituloVideo, paginavel);
+
+        if (paginaVideoEntity.getContent().isEmpty()) {
+            throw new VideoNoContentException();
+        }
+
+        List<Video> listaVideos = videoMapper.converterListaVideoEntityParaListaVideoModel(paginaVideoEntity.getContent());
+
+        return new PageDto<>(listaVideos, paginaVideoEntity.getTotalElements(), paginaVideoEntity.getTotalPages());
     }
 }
