@@ -4,15 +4,18 @@ phases:
   install:
     runtime-versions:
       java: corretto11
-  build:
+  pre_build:
     commands:
       - mvn clean install
+  build:
+    commands:
+      - mvn clean package
   post_build:
     commands:
       - echo Build completed
 artifacts:
   files:
-    - build/libs/*.jar
+    - target/*.jar
     - scripts/*.sh
     - appspec.yml
   discard-paths: yes
