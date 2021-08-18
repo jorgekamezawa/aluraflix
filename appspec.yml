@@ -20,3 +20,7 @@ hooks:
     - location: server_start.sh
       timeout: 300
       runas: ec2-user
+  ApplicationStop:
+    - location: server_stopsh
+      timeout: 300
+      runas: ec2-user
