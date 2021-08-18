@@ -25,6 +25,7 @@ public class VideoController {
         return ResponseEntity.ok(paginaVideo);
     }
 
+
     @GetMapping("/{id}")
     public ResponseEntity<Video> buscarVideoPorId(@PathVariable(name = "id") Long id) {
         Video video = videoService.buscarVideoPorId(id);
