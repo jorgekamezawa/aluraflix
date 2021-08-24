@@ -5,7 +5,7 @@ spring:
     name: "AluraFlix"
   datasource:
     driverClassName: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://database-default.coel2zakxr8u.us-east-1.rds.amazonaws.com:3306/alch
+    url: jdbc:mysql://aluraflixdb.coel2zakxr8u.us-east-1.rds.amazonaws.com:3306/alch
     username: root
     password: root1234
   jpa:
