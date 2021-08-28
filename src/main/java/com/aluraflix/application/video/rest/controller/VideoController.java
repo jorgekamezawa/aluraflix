@@ -1,4 +1,4 @@
-package com.aluraflix.application.rest.controller;
+package com.aluraflix.application.video.rest.controller;
 
 import com.aluraflix.domain.common.model.PageDto;
 import com.aluraflix.domain.video.model.Video;

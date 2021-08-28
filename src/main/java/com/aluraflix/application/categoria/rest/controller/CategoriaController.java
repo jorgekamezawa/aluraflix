@@ -1,4 +1,4 @@
-package com.aluraflix.application.rest.controller;
+package com.aluraflix.application.categoria.rest.controller;
 
 import com.aluraflix.domain.categoria.model.Categoria;
 import com.aluraflix.domain.categoria.service.CategoriaService;

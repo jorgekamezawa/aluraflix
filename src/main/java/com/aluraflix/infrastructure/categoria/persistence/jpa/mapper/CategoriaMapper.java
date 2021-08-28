@@ -1,7 +1,7 @@
-package com.aluraflix.infrastructure.persistence.jpa.mapper;
+package com.aluraflix.infrastructure.categoria.persistence.jpa.mapper;
 
 import com.aluraflix.domain.categoria.model.Categoria;
-import com.aluraflix.infrastructure.persistence.jpa.entity.CategoriaPersistenceEntity;
+import com.aluraflix.infrastructure.categoria.persistence.jpa.entity.CategoriaPersistenceEntity;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;

@@ -1,7 +1,8 @@
-package com.aluraflix.infrastructure.persistence.jpa.mapper;
+package com.aluraflix.infrastructure.video.persistence.jpa.mapper;
 
 import com.aluraflix.domain.video.model.Video;
-import com.aluraflix.infrastructure.persistence.jpa.entity.VideoPersistenceEntity;
+import com.aluraflix.infrastructure.categoria.persistence.jpa.mapper.CategoriaMapper;
+import com.aluraflix.infrastructure.video.persistence.jpa.entity.VideoPersistenceEntity;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 

@@ -1,5 +1,6 @@
-package com.aluraflix.infrastructure.persistence.jpa.entity;
+package com.aluraflix.infrastructure.video.persistence.jpa.entity;
 
+import com.aluraflix.infrastructure.categoria.persistence.jpa.entity.CategoriaPersistenceEntity;
 import lombok.*;
 
 import javax.persistence.*;
@@ -27,6 +28,6 @@ public class VideoPersistenceEntity {
     @Column(name = "url", length = 50, nullable = false, unique = false)
     private String url;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     private CategoriaPersistenceEntity categoria;
 }

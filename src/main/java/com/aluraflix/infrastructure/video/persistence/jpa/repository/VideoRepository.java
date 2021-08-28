@@ -1,7 +1,7 @@
-package com.aluraflix.infrastructure.persistence.jpa.respository;
+package com.aluraflix.infrastructure.video.persistence.jpa.repository;
 
-import com.aluraflix.infrastructure.persistence.jpa.entity.CategoriaPersistenceEntity;
-import com.aluraflix.infrastructure.persistence.jpa.entity.VideoPersistenceEntity;
+import com.aluraflix.infrastructure.categoria.persistence.jpa.entity.CategoriaPersistenceEntity;
+import com.aluraflix.infrastructure.video.persistence.jpa.entity.VideoPersistenceEntity;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;

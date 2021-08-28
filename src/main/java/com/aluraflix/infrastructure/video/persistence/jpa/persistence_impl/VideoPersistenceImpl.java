@@ -1,4 +1,4 @@
-package com.aluraflix.infrastructure.persistence.jpa.persistence_impl;
+package com.aluraflix.infrastructure.video.persistence.jpa.persistence_impl;
 
 import com.aluraflix.domain.categoria.exception.CategoriaPersistenceException;
 import com.aluraflix.domain.categoria.exception.CategoriaValueNotFoundException;
@@ -10,11 +10,11 @@ import com.aluraflix.domain.video.exception.VideoNoContentException;
 import com.aluraflix.domain.video.exception.VideoPersistenceException;
 import com.aluraflix.domain.video.exception.VideoValueNotFoundException;
 import com.aluraflix.domain.video.model.Video;
-import com.aluraflix.infrastructure.persistence.jpa.entity.CategoriaPersistenceEntity;
-import com.aluraflix.infrastructure.persistence.jpa.entity.VideoPersistenceEntity;
-import com.aluraflix.infrastructure.persistence.jpa.mapper.CategoriaMapper;
-import com.aluraflix.infrastructure.persistence.jpa.mapper.VideoMapper;
-import com.aluraflix.infrastructure.persistence.jpa.respository.VideoRepository;
+import com.aluraflix.infrastructure.categoria.persistence.jpa.entity.CategoriaPersistenceEntity;
+import com.aluraflix.infrastructure.video.persistence.jpa.entity.VideoPersistenceEntity;
+import com.aluraflix.infrastructure.categoria.persistence.jpa.mapper.CategoriaMapper;
+import com.aluraflix.infrastructure.video.persistence.jpa.mapper.VideoMapper;
+import com.aluraflix.infrastructure.video.persistence.jpa.repository.VideoRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;

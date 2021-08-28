@@ -1,8 +1,10 @@
-package com.aluraflix.infrastructure.persistence.jpa.entity;
+package com.aluraflix.infrastructure.categoria.persistence.jpa.entity;
 
+import com.aluraflix.infrastructure.video.persistence.jpa.entity.VideoPersistenceEntity;
 import lombok.*;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Getter
 @Setter
@@ -23,4 +25,7 @@ public class CategoriaPersistenceEntity {
 
     @Column(name = "cor", length = 20, nullable = false)
     private String cor;
+
+    @OneToMany(mappedBy = "categoria", targetEntity = VideoPersistenceEntity.class, cascade = CascadeType.MERGE)
+    private List<VideoPersistenceEntity> videos;
 }

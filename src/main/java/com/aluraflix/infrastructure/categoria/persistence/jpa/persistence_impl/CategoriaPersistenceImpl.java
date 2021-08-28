@@ -1,4 +1,4 @@
-package com.aluraflix.infrastructure.persistence.jpa.persistence_impl;
+package com.aluraflix.infrastructure.categoria.persistence.jpa.persistence_impl;
 
 import com.aluraflix.domain.categoria.adapter.CategoriaPersistenceAdapter;
 import com.aluraflix.domain.categoria.exception.CategoriaFieldNotAcceptableException;
@@ -7,9 +7,9 @@ import com.aluraflix.domain.categoria.exception.CategoriaPersistenceException;
 import com.aluraflix.domain.categoria.exception.CategoriaValueNotFoundException;
 import com.aluraflix.domain.categoria.model.Categoria;
 import com.aluraflix.domain.common.model.PageDto;
-import com.aluraflix.infrastructure.persistence.jpa.entity.CategoriaPersistenceEntity;
-import com.aluraflix.infrastructure.persistence.jpa.mapper.CategoriaMapper;
-import com.aluraflix.infrastructure.persistence.jpa.respository.CategoriaRepository;
+import com.aluraflix.infrastructure.categoria.persistence.jpa.entity.CategoriaPersistenceEntity;
+import com.aluraflix.infrastructure.categoria.persistence.jpa.mapper.CategoriaMapper;
+import com.aluraflix.infrastructure.categoria.persistence.jpa.repository.CategoriaRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
